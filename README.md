@@ -87,7 +87,7 @@ Depois de editar o arquivo `docker-compose.yml`, suba o contêiner com o comando
 
 ## Créditos
 
-Este repositório é baseado no [Mastodon Now Listening](https://github.com/gmgall/nowlistening-mastodon), de [Guilherme Gall](https://ursal.zone/@gmgall). Aqui basicamente pegamos o código dele e colocamos num contêiner Docker ou `systemd-timer`.
+Este repositório é baseado no [Mastodon Now Listening](https://github.com/gmgall/nowlistening-mastodon), de [Guilherme Gall](https://ursal.zone/@gmgall). Aqui basicamente pegamos o código dele e fizemos as adaptações para incluí-lo num contêiner Docker ou `systemd-timer`.
 
 No futuro, o autor original transformará o script num web app para facilitar a instalação e uso.
 
