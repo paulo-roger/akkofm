@@ -3,7 +3,7 @@ services:
     mastofm:
         init: true
         container_name: mastofm
-        image: mastofm:latest
+        image: code.bolha.one/bolha/mastofm:latest
         restart: unless-stopped
         environment:
             - PYTHONUNBUFFERED=true

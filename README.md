@@ -79,10 +79,10 @@ O _timer_ será executado a cada dois minutos e, se você estiver ouvindo alguma
 
 ## Usando com o Docker
 
-Gere uma imagem Docker com o arquivo `Dockerfile` e suba o script após editar o arquivo `docker-compose.yml`, ambos adicionados ao repositório. Para que a imagem do contêiner Docker seja gerada, execute o seguinte comando:
+Use nossa nova imagem e execute o Mastodon Now Listening em um contêiner Docker.
 
 ``` bash
-docker build -t mastofm:latest .
+docker pull code.bolha.one/bolha/mastofm:latest
 ```
 
 Depois de editar o arquivo `docker-compose.yml`, suba o contêiner com o comando: `docker-compose up -d`.
