@@ -18,7 +18,7 @@ Ao executar `update.py` uma única vez, ele usará a API do LastFM para determin
 
 Para manter `Ouvindo agora 🔊` atualizado conforme você escuta um álbum ou playlist, execute `update.py` periodicamente (usando, por exemplo, um agendador como o `cron`) ou usar a imagem Docker.
 
-> Caso sua instância seja modificada e suporte mais de 4 campos extras na bio do perfil, o script não irá funcionar pra você (por limitação do `mastodon.py`).
+> Caso sua instância seja modificada e suporte mais de 4 campos extras na bio do perfil, o script não irá funcionar pra você (por limitação do `mastodon.py`). Será necessário deixar no máximo três campos preenchidos para o quarto campo ser usado pelo MastoFM.
 
 ## Execução automática
 
@@ -77,7 +77,7 @@ O _timer_ será executado a cada dois minutos e, se você estiver ouvindo alguma
 
 ## Usando com o Docker
 
-Use nossa nova imagem e execute o Mastodon Now Listening em um contêiner Docker.
+Use nossa nova imagem e execute o MastoFM em um contêiner Docker.
 
 ``` bash
 docker pull code.bolha.one/bolha/mastofm:latest
