@@ -28,7 +28,7 @@ Primeiro, salve o seguinte código em `/etc/systemd/system/mastofm.service`:
 
 ``` ini
 [Unit]
-Description=Mastodon Now Playing
+Description=MastoFM
 After=network-online.target
 Wants=mastofm.timer
 
@@ -54,7 +54,7 @@ Agora, salve o seguinte código em `/etc/systemd/system/mastofm.timer`:
 
 ``` ini
 [Unit]
-Description=Timer do Mastodon Now Playing
+Description=Timer do MastoFM
 
 [Timer]
 Unit=mastofm.service
@@ -87,7 +87,7 @@ Depois de editar o arquivo `docker-compose.yml`, suba o contêiner com o comando
 
 ## Créditos
 
-Este repositório é baseado no [Mastodon Now Listening](https://github.com/gmgall/nowlistening-mastodon), de [Guilherme Gall](https://ursal.zone/@gmgall). Aqui basicamente pegamos o código dele e colocamos num contêiner Docker.
+Este repositório é baseado no [Mastodon Now Listening](https://github.com/gmgall/nowlistening-mastodon), de [Guilherme Gall](https://ursal.zone/@gmgall). Aqui basicamente pegamos o código dele e colocamos num contêiner Docker ou `systemd-timer`.
 
 No futuro, o autor original transformará o script num web app para facilitar a instalação e uso.
 
