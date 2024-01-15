@@ -84,3 +84,11 @@ docker pull code.bolha.one/bolha/mastofm:latest
 ```
 
 Depois de editar o arquivo `docker-compose.yml`, suba o contêiner com o comando: `docker-compose up -d`.
+
+## Créditos
+
+Este repositório é baseado no [Mastodon Now Listening](https://github.com/gmgall/nowlistening-mastodon), de [Guilherme Gall](https://ursal.zone/@gmgall). Aqui basicamente pegamos o código dele e colocamos num contêiner Docker.
+
+No futuro, o autor original transformará o script num web app para facilitar a instalação e uso.
+
+Este programa está licenciado sob a `MIT`.
