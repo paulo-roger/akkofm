@@ -35,10 +35,6 @@ Wants=mastofm.timer
 [Service]
 Type=simple
 Environment="PYTHONUNBUFFERED=1"
-Environment="LAST_API_KEY=<insira_aqui>"
-Environment="LAST_USER=<insira_aqui>"
-Environment="MAST_ACC_TOKEN=<insira_aqui>"
-Environment="INSTANCE_URL=<insira_aqui>"
 DynamicUser=yes
 Restart=always
 RestartSec=1 
@@ -73,17 +69,26 @@ systemctl daemon-reload
 systemctl enable --now mastofm.timer
 ```
 
-O _timer_ será executado a cada dois minutos e, se você estiver ouvindo alguma coisa, o nome da música aparecerá em seu perfil. Lembre de alterar `/opt/mastofm/` pelo caminho da pasta onde o arquivo `update.py` está.
+O _timer_ rodará a cada dois minutos e, se você estiver ouvindo alguma coisa, o nome da música aparecerá em seu perfil. Lembre de alterar `/opt/mastofm/` pelo caminho da pasta onde o arquivo `update.py` está.
 
 ## Usando com o Docker
 
-Use nossa nova imagem e execute o MastoFM em um contêiner Docker.
+Você pode dispensar serviços do `systemd` e dockerizar a execução do bot. Para isso, use a imagem `mastofm:latest` de nosso repositório.
 
 ``` bash
-docker pull code.bolha.one/bolha/mastofm:latest
+docker run -d                               \
+    -e PYTHONUNBUFFERED=true                \
+    -e LAST_API_KEY=ABCDXYZ                 \
+    -e LAST_USER=johnsnow                   \
+    -e MAST_ACC_TOKEN=ABCDXYZ               \
+    -e INSTANCE_URL=https://botsin.space    \
+    -e TZ=America/Recife                    \
+    --name mastofm                          \
+    --restart unless-stopped                \
+    code.bolha.one/bolha/mastofm:latest
 ```
 
-Depois de editar o arquivo `docker-compose.yml`, suba o contêiner com o comando: `docker-compose up -d`.
+Informe as variáveis de ambiente `LAST_API_KEY`, `LAST_USER`, `MAST_ACC_TOKEN` e `INSTANCE_URL` como você faria no arquivo `.env`. Se preferir, edite e use o arquivo `docker-compose.yml` com o Portainer Stacks ou o `docker-compose up -d`.
 
 ## Créditos
 
