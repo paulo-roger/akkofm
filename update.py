@@ -60,6 +60,8 @@ def run():
 
 # Informa que a execução está operacional
 logging.info("O bot está em funcionamento.\n")
+# Executa os trabalhos no início da execução, antes dos agendamentos
+run()
 
 # Agenda a execução do trabalho acima
 schedule.every(2).minutes.do(run)
