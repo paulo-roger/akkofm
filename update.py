@@ -44,6 +44,7 @@ def update_fields():
     result = mastodon.account_update_credentials(fields = new_profile_tuples)
     return result
 
+# Classe que oculta o output de prints subordinados a ela
 class HiddenPrints:
     def __enter__(self):
         self._original_stdout = sys.stdout
@@ -53,6 +54,7 @@ class HiddenPrints:
         sys.stdout.close()
         sys.stdout = self._original_stdout
 
+# Trabalho que executa o código principal do bot
 def run():
     logging.info(now_listening_str())
     with HiddenPrints():
