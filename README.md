@@ -6,19 +6,33 @@ Bateu nostalgia dos tempos de MSN Messenger e seu recurso _ouvindo agora_? Adici
 
 ## Como usar esse script
 
-O script `update.py` precisa acessar as seguintes variáveis de ambiente:
+Baixe um arquivo ZIP com o conteúdo deste repositório ou clone-o e instale as dependências:
+
+``` bash
+git clone https://code.bolha.one/bolha/mastofm.git
+apt update
+apt install python3 python3-pip
+
+cd mastofm
+pip3 install -r requirements.txt
+```
+
+Agora vamos configurar o funcionamento do arquivo `update.py`, que precisa acessar as seguintes variáveis de ambiente:
 
 - `LAST_API_KEY`: API Key de uma [aplicação no LastFM](https://www.last.fm/api)
 - `LAST_USER`: seu usuário no LastFM
-- `MAST_ACC_TOKEN`: um _access token_ de um [app no Mastodon](https://docs.joinmastodon.org/client/token/).
-    - Gere seu token facilmente preenchendo o campo 3 [neste link](https://token.bolha.one/?client_name=MastoFM&scopes=read:accounts%20write:accounts).
+- `MAST_ACC_TOKEN`: um token de acesso de um [app no Mastodon](https://docs.joinmastodon.org/client/token/).
 - `INSTANCE_URL`: a URL da instância em que o app foi criado
 
-Ao executar `update.py` uma única vez, ele usará a API do LastFM para determinar se o usuário está reproduzindo uma música no momento. Se estiver, adiciona ou atualiza um metadado `Ouvindo agora 🔊` na conta do usuário com o token em `MAST_ACC_TOKEN`.
+> Gere seu token de acesso facilmente preenchendo o campo 3 [neste link](https://token.bolha.one/?client_name=MastoFM&scopes=read:accounts%20write:accounts).
 
-Para manter `Ouvindo agora 🔊` atualizado conforme você escuta um álbum ou playlist, execute `update.py` periodicamente (usando, por exemplo, um agendador como o `cron`) ou usar a imagem Docker.
+Salve as variáveis de ambiente acima em um arquivo `.env` na mesma pasta do MastoFM.
+
+Ao executar `update.py` uma única vez, ele usará a API do LastFM para determinar se o usuário está reproduzindo uma música no momento. Se estiver, adiciona ou atualiza um metadado `Ouvindo agora 🔊` na conta do usuário do Mastodon usando o token de acesso.
 
 > Caso sua instância seja modificada e suporte mais de 4 campos extras na bio do perfil, o script não irá funcionar pra você (por limitação do `mastodon.py`). Será necessário deixar no máximo três campos preenchidos para o quarto campo ser usado pelo MastoFM.
+
+Para manter `Ouvindo agora 🔊` atualizado conforme você escuta um álbum ou playlist, execute `update.py` periodicamente (usando, por exemplo, um agendador como o `cron`) ou usar a imagem Docker.
 
 ## Execução automática
 
