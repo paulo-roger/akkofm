@@ -2,7 +2,7 @@
 
 Bateu nostalgia dos tempos de MSN Messenger e seu recurso _ouvindo agora_? Adicione a música em reprodução do seu LastFM nos metadados do seu perfil no Mastodon.
 
-![Perfil no Mastodon com um dos campos mostrando a música sendo reproduzida no momento](https://pub.cdn.bolha.one/mastodon/img/perfil.png)
+![Perfil no Mastodon com um dos campos mostrando a música sendo reproduzida no momento](https://pub.bolha.one/mastodon/img/perfil.png)
 
 ## Como usar esse script
 
