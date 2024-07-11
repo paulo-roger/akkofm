@@ -1,0 +1,42 @@
+curl -X POST \
+	-F 'client_name=AkkoFM' \
+	-F 'redirect_uris=urn:ietf:wg:oauth:2.0:oob' \
+	-F 'scopes=read write push' \
+	https://social.harpia.red/api/v1/apps
+
+	{"id":"9286","name":"AkkoFM","website":null,"client_id":"76O-HfWJtFx3o2Fp3lvNSAW9e0uqSDpfUgulu4wMlLY","client_secret":"yoCkInkwkzS9nZqgv0_cZMyO17YNl3WZNJFbk7o--bk","redirect_uri":"urn:ietf:wg:oauth:2.0:oob","vapid_key":"BB6FWSdD3jzcCEm-mr6w2Q7lonaLMPYGyUoG1bx7_aJ-algLg_sc8r6mkI2Vc-_Q1U2_EOqFAJ6O0B5GbehkktE"}
+
+	curl -X POST \
+	-F 'client_id=76O-HfWJtFx3o2Fp3lvNSAW9e0uqSDpfUgulu4wMlLY' \
+	-F 'client_secret=yoCkInkwkzS9nZqgv0_cZMyO17YNl3WZNJFbk7o--bk' \
+	-F 'redirect_uri=urn:ietf:wg:oauth:2.0:oob' \
+	-F 'grant_type=client_credentials' \
+	https://social.harpia.red/oauth/token
+
+	{"id":12512,"scope":"read write push","created_at":1717033965,"access_token":"kT56MOtS_dyQc0VQFrYNoLvdQ_-2PVs8q4wDW04U-2U","expires_in":3153600000,"refresh_token":"qqyWr8JkiDB36y_V-7YycmP44F2sGPn5tlhZwv8WuIo","token_type":"Bearer"}
+
+	curl \
+	-H 'Authorization: Bearer kT56MOtS_dyQc0VQFrYNoLvdQ_-2PVs8q4wDW04U-2U' \
+	https://social.harpia.red/api/v1/accounts/verify_credentials
+
+	https://social.harpia.red/oauth/authorize
+?client_id=76O-HfWJtFx3o2Fp3lvNSAW9e0uqSDpfUgulu4wMlLY
+&scope=read+write+push
+&redirect_uri=urn:ietf:wg:oauth:2.0:oob
+&response_type=code
+
+
+	curl -X POST \
+	-F 'client_id=76O-HfWJtFx3o2Fp3lvNSAW9e0uqSDpfUgulu4wMlLY' \
+	-F 'client_secret=yoCkInkwkzS9nZqgv0_cZMyO17YNl3WZNJFbk7o--bk' \
+	-F 'redirect_uri=urn:ietf:wg:oauth:2.0:oob' \
+	-F 'grant_type=authorization_code' \
+	-F 'code=scL8xHp9XDJUh6o1UbHezmq-TNnNmWpWPa-FBsAcyBk' \
+	-F 'scope=read write push' \
+	https://social.harpia.red/oauth/token
+
+	{"id":12670,"scope":"read write push","me":"https://social.harpia.red/users/kariboka","created_at":1717082326,"access_token":"afgGOmWnTK2RpgEoi5-VifsorrTssi71dCLZLWts3fk","expires_in":3153600000,"refresh_token":"M5F7bD6r3UxPxSwp0sV9Y-hphdGdLyWZbNb2naWnPSc","token_type":"Bearer"}
+
+	curl \
+	-H 'Authorization: Bearer afgGOmWnTK2RpgEoi5-VifsorrTssi71dCLZLWts3fk' \
+	https://social.harpia.red/api/v1/accounts/verify_credentials

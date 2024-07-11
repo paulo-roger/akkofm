@@ -1,0 +1,2 @@
+[06/06/2024 00:32:44] [INFO] O bot está em funcionamento.
+

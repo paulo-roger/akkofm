@@ -1,0 +1,182 @@
+import os, pylast, logging, schedule, time, sys, requests, json
+from pprint import pprint
+from mastodon import Mastodon
+from dotenv import load_dotenv
+from datetime import datetime, timezone
+from contextlib import contextmanager
+from googleapiclient.discovery import build
+
+load_dotenv()
+
+# Configurações de log
+logging.basicConfig(
+  # filename='log.txt',
+  format="[%(asctime)s] [%(levelname)s] %(message)s",
+  datefmt="%d/%m/%Y %H:%M:%S",
+  level=logging.INFO
+)
+
+# Configurações de integração
+LAST_API_KEY = os.getenv("LAST_API_KEY")
+LAST_USER = os.getenv("LAST_USER")
+MAST_ACC_TOKEN = os.getenv("MAST_ACC_TOKEN")
+INSTANCE_URL = os.getenv("INSTANCE_URL")
+NOWPLAYING = os.getenv("NOWPLAYING")
+YT_API_KEY = os.getenv("YT_API_KEY")
+
+# Create network and user objects once
+network = pylast.LastFMNetwork(api_key=LAST_API_KEY)
+user = pylast.User(LAST_USER, network)
+mastodon = Mastodon(access_token=MAST_ACC_TOKEN, api_base_url=INSTANCE_URL, feature_set='pleroma')
+youtube = build('youtube', 'v3', developerKey=YT_API_KEY)
+
+last_posted_track = None  # Track the last posted toot
+
+# Verifica o que está sendo ouvido
+def now_listening_str():
+  now_playing = user.get_now_playing()
+  if not now_playing:
+    return None
+  track_name = now_playing.get_title()
+  artist_name = now_playing.get_artist().get_name()
+  return track_name + ' - ' + artist_name
+
+# Verifica o ultimo like
+def last_loved_str(current_track):
+  now = datetime.now(timezone.utc).timestamp()
+  loved = user.get_loved_tracks(limit=1)
+  loved_timestamp = float(loved[0].timestamp)
+  track_name = str(loved[0].track.title)
+  artist_name = str(loved[0].track.artist)
+  current_loved_track = track_name + ' - ' + artist_name
+  # if 0 <= (now - loved_timestamp) < 120 and current_loved_track == current_track:
+  if 0 <= (now - loved_timestamp) < 60:
+    return current_loved_track
+  else: return None
+
+# Inclui o que está sendo ouvido nos campos extras (Mudei)
+def update_fields(current_track):
+  profile_fields = mastodon.account_verify_credentials()['source']['fields']
+
+  if current_track is None:
+    for row in profile_fields:
+      if row['name'] == NOWPLAYING:
+        row['name'] = 'Last played'
+  
+  else: 
+    has_now_listening_field = False
+    for row in profile_fields:
+      if row ['name'] == 'Last played':
+        has_now_listening_field = True
+        row ['name'] = NOWPLAYING
+        row['value'] = current_track
+      if row['name'] == NOWPLAYING:
+        has_now_listening_field = True
+        row['value'] = current_track
+
+    if not has_now_listening_field:
+      profile_fields.append({'name': NOWPLAYING, 'value': current_track})
+
+  new_profile_fields = [row for row in profile_fields if row['value'] is not None]
+  new_profile_tuples = [tuple(row.values()) for row in new_profile_fields]
+  result = mastodon.account_update_credentials(fields=new_profile_tuples)
+  return result
+
+def youtube_search(query):
+  request = youtube.search().list(
+    part="snippet",
+    maxResults=1,  # Number of results to return
+    q=query,        # The search query term
+    type="video",   # We only want videos
+    videoCategoryId="10"  # Music category
+  )
+  response = request.execute()
+  first_item = response['items'][0]
+  video_id = first_item['id']['videoId']
+  video_url = f"https://www.youtube.com/watch?v={video_id}"
+  return video_url
+
+def songwhip(link):
+  url = "https://songwhip.com/"
+  data = { "url": link }
+
+  # Make the POST request
+  response = requests.post(url, data=json.dumps(data), headers={"Content-Type": "application/json"})
+
+  url = response.json()['url']
+
+  # Check if the request was successful
+  if response.status_code == 200:
+    print("Request was successful!")
+    print("Response Data:", url)
+    return url
+  else:
+    print("Request failed with status code:", response.status_code)
+    print("Response Content:", response.text)
+    return none 
+
+
+# Posta se eu amei a musica
+def toot_nowplaying(current_loved_track):
+  global last_posted_track
+  if current_loved_track is None or current_loved_track == last_posted_track:
+    return None
+
+  youtube_link = youtube_search(current_loved_track)
+  link = songwhip(youtube_link)
+
+  # link = info['url']
+  toot = f"<a href='{link}'>{current_loved_track}</a> <br><br> #NowPlaying #LovedTrack"
+
+  result = mastodon.status_post(toot, content_type='text/html')
+  last_posted_track = current_loved_track  # Update the last posted track
+  return result
+
+# Classe que oculta o output de prints subordinados a ela
+@contextmanager
+def hidden_prints():
+  original_stdout = sys.stdout
+  sys.stdout = open(os.devnull, 'w')
+  try:
+    yield
+  finally:
+    sys.stdout.close()
+    sys.stdout = original_stdout
+
+# Trabalho que executa o código principal do bot
+def run():
+  current_track = now_listening_str()
+  current_loved_track = last_loved_str(current_track)
+
+  print("NowPlaying: ")
+  logging.info(current_track)
+  print("Loved: ")
+  logging.info(current_loved_track)
+  print("Toot: ")
+  logging.info(toot_nowplaying(current_loved_track))
+  print("=========== End Cycle ===========\n\n")
+
+  with hidden_prints():
+    pprint(update_fields(current_track))
+
+def main():
+  # Informa que a execução está operacional
+  logging.info("O bot está em funcionamento.\n")
+  # Agenda a execução do trabalho acima
+  schedule.every(45).seconds.do(run)
+
+  # Loop para verificar agendamentos e executá-los
+  while True:
+    logging.info("Verificando agendamentos")
+    schedule.run_pending()
+    time.sleep(45)  # Sleep for a short time to allow schedule to run
+
+if __name__ == "__main__":
+  try:
+    main()
+  except pylast.WSError as e:
+    logging.error(f"\n\nEncountered a WSError: {e}. Restarting in 10 seconds...")
+    time.sleep(10)  # Wait 10 seconds before restarting
+  except Exception as e:
+    logging.error(f"\n\nUnexpected error: {e}. Restarting in 10 seconds...")
+    time.sleep(10)  # Wait 10 seconds before restarting

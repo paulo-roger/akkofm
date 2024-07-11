@@ -1,0 +1,3 @@
+current_track: Metallica - Orion
+last_loved_track: LovedTrack(track=pylast.Track('Iron Maiden', 'The Wicker Man', pylast.LastFMNetwork('2ac00a0491d04f59c1c333cc9722d8af', '', '', '', '')), date='11 Jun 2024, 10:50', timestamp='1718103014')
+timestamp: 2024-06-11T20:51:43.222294+00:00

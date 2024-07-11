@@ -1,13 +1,14 @@
 version: '3.3'
 services:
-    mastofm:
-        init: true
-        container_name: mastofm
-        image: code.bolha.one/bolha/mastofm:latest
-        restart: unless-stopped
-        environment:
-            - PYTHONUNBUFFERED=true
-            - LAST_API_KEY=<insira aqui>
-            - LAST_USER=<insira aqui>
-            - MAST_ACC_TOKEN=<insira aqui>
-            - INSTANCE_URL=<insira aqui>
+  mastofm:
+    init: true
+    container_name: mastofm
+    build:
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      - PYTHONUNBUFFERED=true
+      - LAST_API_KEY=2ac00a0491d04f59c1c333cc9722d8af
+      - LAST_USER=RogerFerrari
+      - MAST_ACC_TOKEN=kT56MOtS_dyQc0VQFrYNoLvdQ_-2PVs8q4wDW04U-2U
+      - INSTANCE_URL=https://social.harpia.red
